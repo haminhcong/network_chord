@@ -41,7 +41,7 @@ Chúng ta muốn một vài dữ liệu luôn luôn có mặt trên hệ thống
 
 Sơ đồ dưới đây thể hiện kiến trúc three-layered cho một Cooperative Mirroring System. 
 
-![example_cooperative_mirrorning_system](/home/cong/GitHubRepositories/network_chord/image/example_3.png) 
+![example_cooperative_mirrorning_system](./image/example_3.png) 
 Tầng cao nhất cung cấp giao diện sử dụng cho người dùng, giống như là một phần mềm quản lý file, cung cấp tương tác cho người dùng và xác thực - File System Layer. File System Layer này sẽ thể hiện các file và thư mục cho người dùng. Và khi người dùng muốn xem nội dung file hoặc thư mục nào đó trên hệ thống, nó sẽ truyền yêu cầu xuống tầng  “block storage” layer, với các tham số truyền vào yêu cầu là key của file - thư mục mà người dùng muốn xem nội dung ( Việc ánh xạ giữa key của file -thư mục với tên mà file - thư mục hiển thi là nhiệm vụ của File System Layer).
 
 Block Storage Layer có nhiệm vụ là lưu trữ các block chứa nội dung của các file và thư mục.
