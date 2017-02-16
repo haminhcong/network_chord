@@ -39,7 +39,10 @@ Chúng ta muốn một vài dữ liệu luôn luôn có mặt trên hệ thống
 - Distributed Indexes
 - Large-Scale Combinatorial Search
 
-Sơ đồ dưới đây thể hiện kiến trúc three-layered cho một Cooperative Mirroring System. Tầng cao nhất cung cấp giao diện sử dụng cho người dùng, giống như là một phần mềm quản lý file, cung cấp tương tác cho người dùng và xác thực - File System Layer. File System Layer này sẽ thể hiện các file và thư mục cho người dùng. Và khi người dùng muốn xem nội dung file hoặc thư mục nào đó trên hệ thống, nó sẽ truyền yêu cầu xuống tầng  “block storage” layer, với các tham số truyền vào yêu cầu là key của file - thư mục mà người dùng muốn xem nội dung ( Việc ánh xạ giữa key của file -thư mục với tên mà file - thư mục hiển thi là nhiệm vụ của File System Layer).
+Sơ đồ dưới đây thể hiện kiến trúc three-layered cho một Cooperative Mirroring System. 
+
+![example_cooperative_mirrorning_system](/home/cong/GitHubRepositories/network_chord/image/example_3.png) 
+Tầng cao nhất cung cấp giao diện sử dụng cho người dùng, giống như là một phần mềm quản lý file, cung cấp tương tác cho người dùng và xác thực - File System Layer. File System Layer này sẽ thể hiện các file và thư mục cho người dùng. Và khi người dùng muốn xem nội dung file hoặc thư mục nào đó trên hệ thống, nó sẽ truyền yêu cầu xuống tầng  “block storage” layer, với các tham số truyền vào yêu cầu là key của file - thư mục mà người dùng muốn xem nội dung ( Việc ánh xạ giữa key của file -thư mục với tên mà file - thư mục hiển thi là nhiệm vụ của File System Layer).
 
 Block Storage Layer có nhiệm vụ là lưu trữ các block chứa nội dung của các file và thư mục.
 Khi nó nhận được yêu cầu đọc nội dung của block tương ứng với key được truyền tới, nó sẽ sử dụng Chord để xác định xem node nào trong hệ thống đang lưu trữ block tương ứng với key này, sau đó nó sẽ gọi tới node này và yêu cầu node này cung cấp nội dung chứa trong block đó - nội dung này cũng chính là nội dung của file hoặc thư mục mà File System Layer yêu cầu được cung cấp.
@@ -66,7 +69,7 @@ Hàm băm cố định được sử dụng trong Chord sẽ gán cho các node 
 
 Sau khi kết thúc quá trình hashing, các node được xếp lên một ring logic. Một key k được gán vào node có m-bit identifier bằng k, hoặc là node đầu tiên nằm phía sau giá trị **k** trên ring logic, node này được gọi là **succ(k)**.
 
-Consitent hashing được thiết kế để cho phép các node gia nhập hoặc rời khỏi hệ thống mà không tạo ra quá nhiều xáo trộn và thay đổi. Để duy trì tính chất này, khi một node *n* ra nhập hệ thống, nó sẽ trao đổi và điều chỉnh các cặp **key-value ** với node succ(n). Khi node *n* rời khỏi hệ thống, nó sẽ chuyển toàn bộ các cặp **key-value** mà nó đang lưu trữ sang node succ(n).
+Consitent hashing được thiết kế để cho phép các node gia nhập hoặc rời khỏi hệ thống mà không tạo ra quá nhiều xáo trộn và thay đổi. Để duy trì tính chất này, khi một node *n* ra nhập hệ thống, nó sẽ trao đổi và điều chỉnh các cặp **key-value** với node succ(n). Khi node *n* rời khỏi hệ thống, nó sẽ chuyển toàn bộ các cặp **key-value** mà nó đang lưu trữ sang node succ(n).
  
  
  Các kết quả dưới đây đã được chứng minh ở bài báo giới thiệu consistent hashing:
