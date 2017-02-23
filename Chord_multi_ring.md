@@ -40,8 +40,8 @@ Trên đây là một ví dụ về Single Ring Model và Multi Ring Model. Qua 
 
 Trong thực tế, trong mô hình multi-ring của chúng ta, các thao tác quản lý và tìm kiếm trong các ring đơn lẻ được thực hiện độc lập với nhau dựa trên các nguyên lý của Chord protocol. Tuy nhiên, do hệ thống của chúng thực tế là sự kết nối các single Chord ring với nhau, do đó chúng ta cần tạo ra cho hệ thống khả năng tìm kiếm trên toàn bộ hệ thống, thông qua nhiều ring chứ không còn chỉ giới hạn trong 1 ring đơn lẻ. Để tạo ra khả năng này, trên mỗi node ngoài các thông tin định tuyến của Chord protocol như Successor, Predessor, Finger Table, chúng ta sẽ tạo ra thêm một thông tin định tuyến mới được gọi là Ring Talble (RT). Vai trò của Ring Table là cung cấp các thông tin định tuyến hỗ trợ việc chuyển tiếp yêu cầu phân giải (lookup_request) từ ring  này sang các ring khác có kết nối với ring đó. Ring Table được thiết kế tương tự như Finger Table và được phân tán trên tất cả các node trong hệ thống. Số lượng entry trong Ring Table bằng với số lượng các successor node không trùng nhau xuất hiện trong các entry của Finger Table. Mỗi một entry trong Routable có chứa 2 trường dữ liệu sau:
 
-	- NodeID: Là ID của các successor node phân biệt xuất hiện trong Finger Table
-	- Ring ID: Là ID của các ring mà các successor node trên cùng tham gia vào trong thời điểm hiện tại.
+- NodeID: Là ID của các successor node phân biệt xuất hiện trong Finger Table
+- Ring ID: Là ID của các ring mà các successor node trên cùng tham gia vào trong thời điểm hiện tại.
 
 Dưới đây là một ví dụ về các thông tin sẽ được lưu trên một node trong hệ thống Multi-ring của chúng ta:
 
@@ -132,22 +132,23 @@ def n.externalringLookup(passed_rings_list, curent_ringID):
  		if row.ringIDs has ringIDs not in passed_rings_list:
 			Append row.nodeID and new found ringIDs into shared_nodes
 	
-	if shared nodes!= [ ]:
+	if shared_nodes!= [ ]:
 		#if new ringID found, return
-		response.cache node = ring data.successor;
-		response.shared nodes = shared nodes;
+		response.cache_node = ring_data.successor;
+		response.shared_nodes = shared_nodes;
 		return response;
 	else:
 		# if new ringID not found, conduct Step 2
 		# Step 2: Foward to its successor on current ring
-		succ = ring data.successor;
-		response = succ.externalringLookup(passed rings list, curent ringID);
+		succ = ring_data.successor;
+		response = succ.externalringLookup(passed_rings_list, curent_ringID);
 		return response;
 ```
 Vì các single ring trong hệ thống đều sử dụng Chord protocol, nên thao tác **inner-ring lookup** sẽ sử dụng cơ chế của Chord là sử dụng successor, predecessor và Finger Table để tìm ra successor node trên ring đối với identifier *k*. Trong khi đó External-ring lookup sử dụng algorithm 1 phía trên để tìm ra các ring kết nối với ring hiện tại đang xét mà chưa bị khám phá. Algorithm này hoạt động như sau:
-	- Đầu tiên, node n kiểm tra xem trong bảng Ring table của nó có node nào là shared node hay không ?
-	- Nếu trong Ring table có chứa node là shared node, nó kiểm tra xem các ring trong shared node đó đã được khám phá hay chưa (ringIDs **not in** passed rings list )
-	- Trong trường hợp không có ring nào trong các shared node của ring table là chưa được khám phá, **external_ring_lookup** được chuyển tiếp sang successor node và tại successor node, thao tác **external_ring_lookup** được thực hiện lại từ đầu.
+
+- Đầu tiên, node n kiểm tra xem trong bảng Ring table của nó có node nào là shared node hay không ?
+- Nếu trong Ring table có chứa node là shared node, nó kiểm tra xem các ring trong shared node đó đã được khám phá hay chưa (ringIDs **not in** passed rings list )
+- Trong trường hợp không có ring nào trong các shared node của ring table là chưa được khám phá, **external_ring_lookup** được chuyển tiếp sang successor node và tại successor node, thao tác **external_ring_lookup** được thực hiện lại từ đầu.
 	
 Thao tác **external_ring_lookup** được thực hiện lặp lại trên các node trong ring, cho đến khi thuật toán tìm được một shared node kết nối tới 1 ring chưa được khám phá, hoặc cho đến khi tất cả các node trong ring được duyệt qua. Trong thuật toán 1, để tránh cho thao tác  **inner-ring lookup** bị thực hiện lại trên các ring đã được khám phá, 2 tham số **passed_ring_list** và **cache_node** được thiết kế để đánh dấu các ring đã được thuật toán khám phá và successor của node hiện tại. Tham số **passed_ring_list** đảm bảo rằng một ring trong hệ thống không bị khám phá 2 lần, còn **cache_node** được sử dụng để  ???
 
