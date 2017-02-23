@@ -113,7 +113,7 @@ Theo các định lý trong Chord protocol, thì trong thao tác **Key Insertion
 Trên hệ thống Chord multi ring, **key lookup** được chia ra làm 2 loại sau:
 
 - Inner-ring lookup: Là thao tác tìm successor node của 1 identifier *k* bên trong một ring và kiểm tra xem successor đó có chứa cặp **key-value** tương ứng với **k** hay không.
-- External-ring lookup tìm các shared nodes nằm trong cùng ring với node đang xét để thực hiện thao tác chuyển truy vấn tới thực hiện tại 1 ring khác trên hệ thống, trong trường hợp ring hiện tại chúng ta đang xét có **k-predecessor node** không có chưa cặp key-value tương ứng với key *k*.
+- External-ring lookup: Là thao tác tìm các shared nodes nằm trong cùng ring với node đang xét để thực hiện thao tác chuyển truy vấn tới thực hiện tại 1 ring khác trên hệ thống, trong trường hợp ring hiện tại chúng ta đang xét có **k-predecessor node** không có chưa cặp key-value tương ứng với key *k*.
 
 Hai loại  **key lookup** trên được sử dụng để tìm kiếm trên toàn bộ các ring của hệ thống cho đến khi tìm thấy ring chứa **k-predecessor node** chứa cặp key-value tương ứng với **k**.
 
